@@ -173,42 +173,71 @@ void setup() {
 
   delay(2000);
   
-  /*USBSerial.print("dv.............:");
-  USBSerial.println(dv_id);
-  USBSerial.print("channel.............:");
-  USBSerial.println(chann_id);
   USBSerial.print("user.............:");
   USBSerial.println(mqtt_user);
   USBSerial.print("serwer.............:");
   USBSerial.println(mqtt_server);
   USBSerial.print("password:.............");
   USBSerial.println(mqtt_pass);
-  USBSerial.print("message:.............");
-  USBSerial.println(message);
-  USBSerial.print("devName message:.............");
-  USBSerial.println(dev_name_message);
-  USBSerial.print("level alarm:.............");
-  USBSerial.println(level_alarm);
-  USBSerial.print("level alarm night:.............");
-  USBSerial.println(level_alarm_night);
-  USBSerial.println(top1);*/
+  USBSerial.print("dv.............1:");
+  USBSerial.println(dv_id_1);
+  USBSerial.print("channel.............1:");
+  USBSerial.println(chann_id_1);
+  USBSerial.print("message:.............1");
+  USBSerial.println(message_1);
+  USBSerial.print("devName message:.............1");
+  USBSerial.println(dev_name_message_1);
+  USBSerial.print("level alarm:.............1");
+  USBSerial.println(level_alarm_1);
+  USBSerial.print("level alarm night:.............1");
+  USBSerial.println(level_alarm_night_1);
+  USBSerial.println(top1);
+  USBSerial.print("dv.............2:");
+  USBSerial.println(dv_id_2);
+  USBSerial.print("channel.............2:");
+  USBSerial.println(chann_id_2);
+  USBSerial.print("message:.............2");
+  USBSerial.println(message_2);
+  USBSerial.print("devName message:.............2");
+  USBSerial.println(dev_name_message_2);
+  USBSerial.print("level alarm:.............2");
+  USBSerial.println(level_alarm_2);
+  USBSerial.print("level alarm night:.............2");
+  USBSerial.println(level_alarm_night_2);
+  USBSerial.println(top2);
+  USBSerial.print("dv.............3:");
+  USBSerial.println(dv_id_3);
+  USBSerial.print("channel.............3:");
+  USBSerial.println(chann_id_3);
+  USBSerial.print("message:.............3");
+  USBSerial.println(message_3);
+  USBSerial.print("devName message:.............3");
+  USBSerial.println(dev_name_message_3);
+  USBSerial.print("level alarm:.............3");
+  USBSerial.println(level_alarm_3);
+  USBSerial.print("level alarm night:.............3");
+  USBSerial.println(level_alarm_night_3);
+  USBSerial.println(top3);
   mqttConfig();
 }
 
 void loop() {
-  SuplaDevice.iterate();
-  if (!client.connected()) {
-    long now = millis();
-    if (now - lastReconnectAttempt > 5000) {
-      lastReconnectAttempt = now;
-      if (reconnect()) {
-        lastReconnectAttempt = 0;
+ SuplaDevice.iterate();
+  if(num_of_counter !=0){
+    nightReady();
+    if (!client.connected()) {
+      long now = millis();
+      if (now - lastReconnectAttempt > 5000) {
+       lastReconnectAttempt = now;
+        if (reconnect()) {
+         lastReconnectAttempt = 0;
+        }
       }
+    } 
+    else {
+     client.loop();
     }
-  } else {
-    client.loop();
-  }
-  nightReady();
+
   if(num_of_counter==1){
     waterControl1();
   }
@@ -221,6 +250,7 @@ void loop() {
     waterControl2();
     waterControl3();
   }
+}
 }
 
 boolean reconnect() {

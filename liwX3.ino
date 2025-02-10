@@ -317,7 +317,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     USBSerial.print("COUNTER2:......................");
     USBSerial.println(counter_2);
   }
-  if (strcmp(topic, top2.c_str()) == 0) {
+  if (strcmp(topic, top3.c_str()) == 0) {
     payload[length] = '\0';
     counter_3 = atof((char*)payload);
     USBSerial.print("COUNTER3:......................");
@@ -649,3 +649,5 @@ void stor3(){
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM33);
   }
 }
+
+

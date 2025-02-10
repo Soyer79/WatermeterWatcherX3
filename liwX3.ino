@@ -328,11 +328,11 @@ void paramSave(){
  if(num_of_counter==1){
   stor1();
  }
- else if(num_of_counter==1){
+ else if(num_of_counter==2){
   stor1();
   stor2();
  }
- else if(num_of_counter==1){
+ else if(num_of_counter==3){
   stor1();
   stor2();
   stor3();

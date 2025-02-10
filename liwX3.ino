@@ -135,7 +135,7 @@ unsigned long lastReconnectAttempt = 0;
 void setup() {
   USBSerial.begin(9600);
   Supla::Storage::Init();
-  paramSave();
+ 
   SuplaDevice.addClock(new Supla::Clock);
   auto clock1 = SuplaDevice.getClock();
   if(num_of_counter==0){
@@ -165,6 +165,7 @@ void setup() {
   SuplaDevice.setSuplaCACert(suplaCACert);
   SuplaDevice.setSupla3rdPartyCACert(supla3rdCACert);
   SuplaDevice.begin();
+  paramSave();
   
   top1 = "supla/"+String(mqtt_user)+"/devices/"+String(dv_id_1)+"/channels/"+String(chann_id_1)+"/state/calculated_value";
   top2 = "supla/"+String(mqtt_user)+"/devices/"+String(dv_id_2)+"/channels/"+String(chann_id_2)+"/state/calculated_value";
@@ -227,7 +228,7 @@ void setup() {
   USBSerial.println(top3);
   USBSerial.print("numofcounter.............:");
   USBSerial.println(num_of_counter);
-  if(num_of_counter != 0){
+  if(dv_id_1 != 1){
    mqttConfig();
   }
 }

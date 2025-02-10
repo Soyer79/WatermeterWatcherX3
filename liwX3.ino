@@ -114,7 +114,7 @@ int32_t level_alarm_night_3 = 10;
 int32_t time_period_3 = 40;
 int32_t time_period_night_3 = 10;
 
-int num_of_counter = 0;
+int32_t num_of_counter = 0;
 String top1 = "xxx";
 String top2 = "xxx";
 String top3 = "xxx";
@@ -141,6 +141,13 @@ void setup() {
   if(num_of_counter==0){
     new Supla::Html::CustomParameter(PARAM34, "number of counters(1,2,3)");
   }
+
+  if (Supla::Storage::ConfigInstance()->getInt32(PARAM34, &num_of_counter)) {
+    SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM34, num_of_counter);
+  } else {
+    SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM34);
+  }
+
   if(num_of_counter==1){
     inputs1();
   }
@@ -218,12 +225,16 @@ void setup() {
   USBSerial.print("level alarm night:.............3");
   USBSerial.println(level_alarm_night_3);
   USBSerial.println(top3);
-  mqttConfig();
+  USBSerial.print("numofcounter.............:");
+  USBSerial.println(num_of_counter);
+  if(num_of_counter != 0){
+   mqttConfig();
+  }
 }
 
 void loop() {
  SuplaDevice.iterate();
-  if(num_of_counter !=0){
+  if(dv_id_1 != 1){
     nightReady();
     if (!client.connected()) {
       long now = millis();
@@ -314,7 +325,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void paramSave(){
-
+ if(num_of_counter==1){
+  stor1();
+ }
+ else if(num_of_counter==1){
+  stor1();
+  stor2();
+ }
+ else if(num_of_counter==1){
+  stor1();
+  stor2();
+  stor3();
+ }
 }
 
 void waterControl1() {
@@ -363,7 +385,7 @@ void waterControl3() {
   }
   if ((prev_hour_millis_3 - millis() > time_period_night_3) && night_3) {
     if (counter_3 > (tempCounterNight_3 + level_alarm_night_3)) {
-      String n = "NIGHT1: ";
+      String n = "NIGHT3: ";
       String n_message = n + message_3;
       Supla::Notification::Send(-1, dev_name_message_3, n_message.c_str());
     }
@@ -421,8 +443,8 @@ void inputs1(){
    new Supla::Html::CustomTextParameter(PARAM9, "push message :1", 25);
    new Supla::Html::CustomParameter(PARAM10, "level alarm :1");
    new Supla::Html::CustomParameter(PARAM11, "level alarm night :1");
-   new Supla::Html::CustomParameter(PARAM12, "time period :1");
-   new Supla::Html::CustomParameter(PARAM13, "time period night :1");
+   new Supla::Html::CustomParameter(PARAM12, "time period(s) :1");
+   new Supla::Html::CustomParameter(PARAM13, "time period(s) night :1");
 }
 void inputs2(){
   new Supla::Html::CustomParameter(PARAM14, "device ID :2");
@@ -433,8 +455,8 @@ void inputs2(){
   new Supla::Html::CustomTextParameter(PARAM19, "push message :2", 25);
   new Supla::Html::CustomParameter(PARAM20, "level alarm :2");
   new Supla::Html::CustomParameter(PARAM21, "level alarm night :2");
-  new Supla::Html::CustomParameter(PARAM22, "time period :2");
-  new Supla::Html::CustomParameter(PARAM23, "time period night :2");
+  new Supla::Html::CustomParameter(PARAM22, "time period(s) :2");
+  new Supla::Html::CustomParameter(PARAM23, "time period night(s) :2");
 }
 void inputs3(){
   new Supla::Html::CustomParameter(PARAM24, "device ID :3");
@@ -506,11 +528,13 @@ void stor1(){
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM11);
   }
   if (Supla::Storage::ConfigInstance()->getInt32(PARAM12, &time_period_1)) {
+    time_period_1 = time_period_1*1000;
     SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM12, time_period_1);
   } else {
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM12);
   }
   if (Supla::Storage::ConfigInstance()->getInt32(PARAM13, &time_period_night_1)) {
+    time_period_night_1 = time_period_night_1*1000;
     SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM13, time_period_night_1);
   } else {
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM13);
@@ -558,11 +582,13 @@ void stor2(){
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM21);
   }
   if (Supla::Storage::ConfigInstance()->getInt32(PARAM22, &time_period_2)) {
+    time_period_2 = time_period_2*1000;
     SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM22, time_period_2);
   } else {
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM22);
   }
   if (Supla::Storage::ConfigInstance()->getInt32(PARAM23, &time_period_night_2)) {
+    time_period_night_2 = time_period_night_2*1000;
     SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM23, time_period_night_2);
   } else {
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM23);
@@ -610,11 +636,13 @@ void stor3(){
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM31);
   }
   if (Supla::Storage::ConfigInstance()->getInt32(PARAM32, &time_period_3)) {
+    time_period_3 = time_period_3*1000;
     SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM32, time_period_3);
   } else {
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM32);
   }
   if (Supla::Storage::ConfigInstance()->getInt32(PARAM33, &time_period_night_3)) {
+    time_period_night_3 = time_period_night_3*1000;
     SUPLA_LOG_DEBUG(" **** Param[%s]: %d", PARAM33, time_period_night_3);
   } else {
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM33);

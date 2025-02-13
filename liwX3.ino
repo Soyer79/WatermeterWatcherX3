@@ -27,42 +27,42 @@ Supla::Html::ProtocolParameters htmlProto;
 WiFiClientSecure client1;
 PubSubClient client(client1);
 
-const char PARAM1[] = "MQTT server";
-const char PARAM2[] = "MQTT user";
-const char PARAM3[] = "MQTT password";
-const char PARAM4[] = "device ID:1";
-const char PARAM5[] = "channel ID:1";
-const char PARAM6[] = "night_h_start:1";
+const char PARAM1[] = "MQTTserver";
+const char PARAM2[] = "MQTTuser";
+const char PARAM3[] = "MQTTpass";
+const char PARAM4[] = "dvID:1";
+const char PARAM5[] = "channID:1";
+const char PARAM6[] = "night_h_st:1";
 const char PARAM7[] = "night_h_end:1";
-const char PARAM8[] = "deviceName in message:1";
+const char PARAM8[] = "dvNameMssg:1";
 const char PARAM9[] = "message:1";
-const char PARAM10[] = "level alarm:1";
-const char PARAM11[] = "level alarm night:1";
-const char PARAM12[] = "period of time:1";
-const char PARAM13[] = "period of time night:1";
+const char PARAM10[] = "lvlAlarm:1";
+const char PARAM11[] = "lvlAlarmN:1";
+const char PARAM12[] = "periodTtime:1";
+const char PARAM13[] = "periodTimeN:1";
 
-const char PARAM14[] = "device ID:2";
-const char PARAM15[] = "channel ID:2";
-const char PARAM16[] = "night_h_start:2";
+const char PARAM14[] = "dvID:2";
+const char PARAM15[] = "channID:2";
+const char PARAM16[] = "night_h_st:2";
 const char PARAM17[] = "night_h_end:2";
-const char PARAM18[] = "deviceName in message:2";
+const char PARAM18[] = "dvNameMssg:2";
 const char PARAM19[] = "message:2";
-const char PARAM20[] = "level alarm:2";
-const char PARAM21[] = "level alarm night:2";
-const char PARAM22[] = "period of time:2";
-const char PARAM23[] = "period of time night:2";
+const char PARAM20[] = "lvlAlarm:2";
+const char PARAM21[] = "lvlAlarmN:2";
+const char PARAM22[] = "periodTtime:2";
+const char PARAM23[] = "periodTtimeN:2";
 
-const char PARAM24[] = "device ID:3";
-const char PARAM25[] = "channel ID:3";
-const char PARAM26[] = "night_h_start:3";
+const char PARAM24[] = "dvID:3";
+const char PARAM25[] = "channID:3";
+const char PARAM26[] = "night_h_st:3";
 const char PARAM27[] = "night_h_end:3";
-const char PARAM28[] = "deviceName in message:3";
+const char PARAM28[] = "dvNameMssg:3";
 const char PARAM29[] = "message:3";
-const char PARAM30[] = "level alarm:3";
-const char PARAM31[] = "level alarm night:3";
-const char PARAM32[] = "period of time:3";
-const char PARAM33[] = "period of time night:3";
-const char PARAM34[] = "number of counters";
+const char PARAM30[] = "lvlAlarm:3";
+const char PARAM31[] = "lvlAlarmN:3";
+const char PARAM32[] = "periodTtime:3";
+const char PARAM33[] = "periodTtimeN:3";
+const char PARAM34[] = "numberOfCounters";
 
 int counter_1 = 0;
 int tempCounter_1;
@@ -120,6 +120,9 @@ String top2 = "xxx";
 String top3 = "xxx";
 String tim;
 
+boolean first_run1=true;
+boolean first_run2=true;
+boolean first_run3=true;
 boolean night_1 = 0;
 boolean night_2 = 0;
 boolean night_3 = 0;
@@ -320,18 +323,33 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (strcmp(topic, top1.c_str()) == 0) {
     payload[length] = '\0';
     counter_1 = atof((char*)payload);
+    if(first_run1){
+      tempCounter_1 = counter_1;
+      tempCounterNight_1 = counter_1;
+      first_run1=false;
+    }
     USBSerial.print("COUNTER1:......................");
     USBSerial.println(counter_1);
   }
   if (strcmp(topic, top2.c_str()) == 0) {
     payload[length] = '\0';
     counter_2 = atof((char*)payload);
+    if(first_run2){
+      tempCounter_2 = counter_2;
+      tempCounterNight_2 = counter_2;
+      first_run2=false;
+    }
     USBSerial.print("COUNTER2:......................");
     USBSerial.println(counter_2);
   }
   if (strcmp(topic, top3.c_str()) == 0) {
     payload[length] = '\0';
     counter_3 = atof((char*)payload);
+    if(first_run3){
+      tempCounter_3 = counter_3;
+      tempCounterNight_3 = counter_3;
+      first_run3=false;
+    }
     USBSerial.print("COUNTER3:......................");
     USBSerial.println(counter_3);
   }
@@ -661,5 +679,3 @@ void stor3(){
     SUPLA_LOG_DEBUG(" **** Param[%s] is not set", PARAM33);
   }
 }
-
-
